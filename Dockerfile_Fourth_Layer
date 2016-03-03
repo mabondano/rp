@@ -1,1 +1,31 @@
 # Dockerfile_Fourth_Layer
+
+# Base
+FROM myrosterplus:2.1
+
+# Maintainer
+MAINTAINER Merly Abondano <m.abondano@inform-software.com>
+
+# Define variable
+ENV ROSTERPLUS_ARCHIVE RosterPlus_Model_test_V2.1.tar.gz
+ENV ROSTERPLUS_HOME /var/local/RosterPlus/V2.1/model/RosterPlus_Model_test_V2.1
+
+ENV PATH $MODEL_HOME:$PATH
+
+# Copy files
+RUN mkdir -p "$MODEL_HOME"
+
+
+
+# Start server 
+RUN echo $MODEL_HOME
+RUN echo "RosterPlus Container V2.1"
+WORKDIR $CATALINA_HOME
+RUN ./bin/startup.sh 
+
+
+# Ports
+EXPOSE 8080
+RUN sh -c "echo export MODEL_HOME=/var/local/RosterPlus/V2.1/model/RosterPlus_Model_test_V2.1 >> /etc/environment"
+CMD ["catalina.sh", "run"]
+
