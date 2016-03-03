@@ -1,1 +1,34 @@
 # Dockerfile_Second_Layer
+
+# Base
+FROM centos-oracle-java:8.73
+
+# Maintainer
+MAINTAINER Merly Abondano <m.abondano@inform-software.com>
+
+RUN echo $JAVA_HOME
+
+# Define variable
+ENV TOMCAT_ARCHIVE apache-tomcat-7.0.68.tar.gz
+ENV CATALINA_HOME /usr/local/tomcat7
+ENV PATH $CATALINA_HOME/bin:$PATH
+
+# Copy files
+RUN mkdir -p "$CATALINA_HOME"
+ADD $TOMCAT_ARCHIVE /
+RUN mv /apache-tomcat-7.0.68/* /$CATALINA_HOME/
+
+# Start server 
+WORKDIR $CATALINA_HOME
+#RUN ./bin/startup.sh
+
+# Test
+RUN java -version
+
+# Ports
+EXPOSE 8080
+
+# Set
+RUN sh -c "echo export CATALINA_HOME=/usr/local/tomcat7 >> /etc/environment"
+#CMD ["catalina.sh", "run"]
+
