@@ -1,1 +1,26 @@
 # Dockerfile_First_Layer
+
+# Pull base image
+FROM centos:latest
+
+# Maintainer
+MAINTAINER Merly Abondano <m.abondano@inform-software.com>
+
+# Define variable
+ENV JAVA_ARCHIVE jre-8u73-linux-x64.rpm
+ENV JAVA_HOME /usr/java/jre1.8.0_73
+ENV JRE_HOME /usr/java/jre1.8.0_73
+ENV PATH $JAVA_HOME/bin:$PATH
+
+# Binary File 
+COPY $JAVA_ARCHIVE /data/
+
+# install java
+WORKDIR /data
+RUN chmod a+x $JAVA_ARCHIVE
+RUN yum --assumeyes install $JAVA_ARCHIVE
+RUN rm -rf $/data/JAVA_ARCHIVE
+
+# set 
+RUN sh -c "echo export JAVA_HOME=/usr/java/jre1.8.0_73 >> /etc/environment"
+RUN java -version
