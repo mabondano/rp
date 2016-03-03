@@ -1,1 +1,39 @@
 # Dockerfile_Third_Layer
+
+# Base
+FROM tomcat:7-jre8 
+
+# Maintainer
+MAINTAINER Merly Abondano <m.abondano@inform-software.com>
+
+# Define variable
+ENV ROSTERPLUS_ARCHIVE v2.1.tar
+ENV DATA_ARCHIVE data.tar
+ENV ROSTERPLUS_HOME /var/local/RosterPlus/V2.1
+ENV DATA_HOME /var/local/data
+ENV PATH $ROSTERPLUS_HOME:$PATH
+ENV PATH $DATA_HOME:$PATH
+
+
+# Copy files
+RUN mkdir -p "$ROSTERPLUS_HOME"
+RUN mkdir -p "$DATA_HOME"
+ADD $ROSTERPLUS_ARCHIVE /
+ADD $DATA_ARCHIVE /
+RUN mv /V2.1/* /$ROSTERPLUS_HOME/
+RUN mv /data/* /$DATA_HOME/
+
+
+# Start server 
+RUN echo $ROSTERPLUS_HOME
+RUN echo "RosterPlus Container V2.1"
+WORKDIR $CATALINA_HOME
+RUN ./bin/startup.sh 
+
+
+# Ports
+EXPOSE 8080
+RUN sh -c "echo export ROSTERPLUS_HOME=/var/local/RosterPlus/V2.1 >> /etc/environment"
+RUN sh -c "echo export DATA_HOME=/var/local/data >> /etc/environment"
+CMD ["catalina.sh", "run"]
+
